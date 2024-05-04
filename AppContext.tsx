@@ -130,7 +130,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     },
   ]);
   const [searchText, setSearchText] = useState('');
-  const [ theme, setTheme ] = useState('dark');
+  const [ theme, setTheme ] = useState('light');
   const [ toAppColor, setToAppColor ] = useState(false)
   const lightBackground = 'white';
   const darkBackground = '#121212';

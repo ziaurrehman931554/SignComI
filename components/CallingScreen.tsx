@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Dimensions } from "react-native";
+import React, { useState, useEffect, useRef,  } from "react";
+import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Dimensions, Image} from "react-native";
 import { Camera } from "expo-camera";
 import { StatusBar } from 'expo-status-bar';
 
@@ -14,18 +14,40 @@ export default function CallingScreen({ navigation, userToken }: CallingScreenPr
   const { height } = Dimensions.get('screen');
 
   const [hasPermission, setHasPermission] = useState<any>(null);
-  const [cameraRef, setCameraRef] = useState(null);
+  const cameraRef = useRef<Camera>(null)
   const [text, setText] = useState("This is container where the text of the signs are displayed.");
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
+  const [cameraType, setCameraType] = useState<any>(Camera.Constants.Type.front);
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isCallOngoing, setIsCallOngoing] = useState(true);
+
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const [isCameraReady, setIsCameraReady] = useState(false);
+
+  const takePicture = async () => {
+    if (cameraRef.current && isCameraReady) {
+      const options = { quality: 0.5, base64: true, skipProcessing: true };
+      const data = await cameraRef.current.takePictureAsync(options);
+      setCapturedPhoto(data.uri);
+    }
+  };
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
     })();
-  }, []);
+    let isCancelled = false;
+    const intervalId = setInterval(() => {
+      if (!isCancelled) {
+        takePicture();
+      }
+    }, 0.05);
+    return () => {
+      isCancelled = true;
+      clearInterval(intervalId);
+    };
+  }, [isCameraReady]);
+  
 
   if (hasPermission === null) {
     return <View />;
@@ -59,13 +81,9 @@ export default function CallingScreen({ navigation, userToken }: CallingScreenPr
             <Text style={[styles.caption, appStyles.text]}>{text}</Text>
           </View>
           <View style={styles.myCamContainer}>
-            {isCallOngoing && (<></>
-              // <Camera
-              //   style={{ flex: 1, borderRadius: 11, zIndex: -1 }}
-              //   type={cameraType}
-              //   ref={(ref) => setCameraRef(ref)}
-              // />
-            )}
+            {isCallOngoing && capturedPhoto ? (
+              <Image source={{ uri: capturedPhoto }} style={{ flex: 1, borderRadius: 11, zIndex: -1 }} />
+            ) : null}
           </View>
         </View>
         <View style={styles.controlContainer}>
@@ -93,12 +111,16 @@ export default function CallingScreen({ navigation, userToken }: CallingScreenPr
         </View>
       </View>
       <View style={[styles.otherCamContainer, appStyles.colorBackground, {height: height - appStyles.top.paddingTop - 192}]}>
-        {isCallOngoing && (<></>
-          // <Camera
-          //   style={{ flex: 1, borderRadius: 11, zIndex: -1  }}
-          //   type={Camera.Constants.Type.back}
-          //   ref={(ref) => setCameraRef(ref)}
-          // />
+        {isCallOngoing && (
+        // <></>
+          <Camera
+            style={{ flex: 1, borderRadius: 11, zIndex: -1  }}
+            type={cameraType}
+            ref={cameraRef}
+            autoFocus
+            useCamera2Api
+            onCameraReady={() => setIsCameraReady(true)}
+          />
         )}
       </View>
       <StatusBar style="dark" />
