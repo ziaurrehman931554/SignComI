@@ -105,7 +105,8 @@ const OnBoardingScreen: React.FC<OnBoardingScreenProps> = ({ onComplete }) => {
                         <Button
                             title={"Get Started"}
                             onPress={handleNext}
-                            color={'white'}
+                            color={'transparent'}
+                            
                         />
                     </View>
                 </View>
@@ -145,7 +146,7 @@ const OnBoardingScreen: React.FC<OnBoardingScreenProps> = ({ onComplete }) => {
                             title={"Continue"}
                             disabled={activeIndex !== OnBoardingData.length }
                             onPress={onComplete}
-                            color={activeIndex !== OnBoardingData.length ? "black" : 'white'}
+                            color={activeIndex !== OnBoardingData.length ? "transparent" : 'transparent'}
                         />
                     </View>
                 </View>

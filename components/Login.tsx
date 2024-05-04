@@ -81,7 +81,7 @@ export default function Login({ onLogin,  reset }: LoginProps): JSX.Element {
       profile: user.profile,
       favorites: [],
       recent: [],
-      setting: [], // Fix: Change 'setting' to an empty array
+      setting: [],
     };
     addUserToData(newUser);
     onLogin(user.email);
@@ -98,27 +98,29 @@ export default function Login({ onLogin,  reset }: LoginProps): JSX.Element {
       </View>
       <View style={styles.bodyContainer}>
         <TouchableOpacity onPress={reset}>
-          <Text style={styles.title}>{status === 'login' ? 'Log in' : 'Sign up'}</Text>
+          <Text style={[styles.title, appStyles.text]}>{status === 'login' ? 'Log in' : 'Sign up'}</Text>
         </TouchableOpacity>
-        <Text style={styles.textTitle}>Email Address</Text>
+        <Text style={[styles.textTitle, appStyles.colorText]}>Email Address</Text>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Email ID"
+            placeholderTextColor={appStyles.text}
             value={user.email}
             onChangeText={(text) => setUser({ ...user, email: text })}
-            style={styles.input}
+            style={[styles.input, appStyles.text]}
           />
           <Text>✅</Text>
         </View>
         <View style={styles.line}></View>
-        <Text style={styles.textTitle}>Password</Text>
+        <Text style={[styles.textTitle, appStyles.colorText]}>Password</Text>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Password"
             secureTextEntry={!showPassword}
+            placeholderTextColor={appStyles.text}
             value={user.password}
             onChangeText={(text) => setUser({ ...user, password: text })}
-            style={styles.input}
+            style={[styles.input, appStyles.text]}
           />
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
             <Text>{showPassword ? '🔴' : '🟢'}</Text>
@@ -127,61 +129,67 @@ export default function Login({ onLogin,  reset }: LoginProps): JSX.Element {
         <View style={styles.line}></View>
         {status === 'signup' && (
           <>
-            <Text style={styles.textTitle}>Name</Text>
+            <Text style={[styles.textTitle, appStyles.colorText]}>Name</Text>
             <View style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}>
-              <TextInput style={styles.input} placeholder="Name" value={user.name} onChangeText={(text) => setUser({ ...user, name: text })}/>
+              <TextInput 
+                style={[styles.input, appStyles.text]} 
+                placeholder="Name" 
+                placeholderTextColor={appStyles.text}
+                value={user.name} 
+                onChangeText={(text) => setUser({ ...user, name: text })}/>
               <Text>✅</Text>
             </View>
             <View style={styles.line}></View>
-            <Text style={styles.textTitle}>Confirm Password</Text>
+            <Text style={[styles.textTitle, appStyles.colorText]}>Confirm Password</Text>
             <View style={styles.inputContainer}>
               <TextInput
                 placeholder="Confirm Password"
                 secureTextEntry={!showPassword}
+                placeholderTextColor={appStyles.text}
                 value={user.confirmPassword}
                 onChangeText={(text) => setUser({ ...user, confirmPassword: text })}
-                style={styles.input}
+                style={[styles.input, appStyles.text]}
               />
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
                 <Text>{showPassword ? '🔴' : '🟢'}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.line}></View>
-            <Text style={styles.textTitle}>Type<Text style={{fontSize: 10, color: '#878787', opacity: 0.5, textAlign: 'right', width: '100%'}}> Currently: {user.type}</Text></Text>
+            <Text style={[styles.textTitle, appStyles.colorText]}>Type<Text style={{fontSize: 10, color: '#878787', opacity: 0.5, textAlign: 'right', width: '100%'}}> Currently: {user.type}</Text></Text>
             <View style={styles.typeContainer}>
-              <TouchableOpacity style={styles.type} onPress={() => setUser({ ...user, type: 'Normal' })}>
-                <Text style={styles.typeText}>Normal</Text>
+              <TouchableOpacity style={[styles.type, appStyles.colorBackground]} onPress={() => setUser({ ...user, type: 'Normal' })}>
+                <Text style={[styles.typeText, appStyles.text]}>Normal</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.type} onPress={() => setUser({ ...user, type: 'Specially-abled' })}>
-                <Text style={styles.typeText}>Specially-abled</Text>
+              <TouchableOpacity style={[styles.type, appStyles.colorBackground]} onPress={() => setUser({ ...user, type: 'Specially-abled' })}>
+                <Text style={[styles.typeText, appStyles.text]}>Specially-abled</Text>
               </TouchableOpacity>
             </View>
           </>
         )}
       </View>
       <View style={styles.btnContainerC}>
-        <TouchableOpacity onPress={handleAuthentication} style={styles.btnContainer} disabled={loading}>
+        <TouchableOpacity onPress={handleAuthentication} style={[styles.btnContainer, appStyles.colorBackground]} disabled={loading}>
           {loading ? (
             <ActivityIndicator size="small" color="white" />
           ) : (
-            <Text style={styles.btn}>{status === 'login' ? 'Login' : 'Signup'}</Text>
+            <Text style={[styles.btn, appStyles.text]}>{status === 'login' ? 'Login' : 'Signup'}</Text>
           )}
         </TouchableOpacity>
       </View>
       <View style={styles.accountContainer}>
-        <Text style={styles.accText}>
+        <Text style={[styles.accText, appStyles.colorText]}>
           {status === 'login' ? (
             <Text>
               Don't have an account?{' '}
               <TouchableOpacity onPress={() => setStatus('signup')}>
-                <Text style={styles.accBtn}>Signup</Text>
+                <Text style={[styles.accBtn, appStyles.text]}>Signup</Text>
               </TouchableOpacity>
             </Text>
           ) : (
             <Text>
               Already have an account?{' '}
               <TouchableOpacity onPress={() => setStatus('login')}>
-                <Text style={styles.accBtn}>Login</Text>
+                <Text style={[styles.accBtn, appStyles.text]}>Login</Text>
               </TouchableOpacity>
             </Text>
           )}
@@ -222,14 +230,11 @@ const styles = StyleSheet.create({
   btnContainer: {
     width: 170,
     alignItems: 'center',
-    backgroundColor: '#5063BF',
     borderRadius: 15,
     paddingHorizontal: 45,
     paddingVertical: 15,
-    color: 'white',
   },
   btn: {
-    color: 'white',
     fontSize: 20,
   },
   accountContainer: {
@@ -240,12 +245,11 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   accText: {
-    color: '#878787',
     justifyContent: 'center',
     alignItems: 'center',
   },
   accBtn: {
-    color: '#5063BF',
+    padding: 0,
   },
   title: {
     fontSize: 40,
@@ -254,7 +258,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   textTitle: {
-    color: '#5063BF',
     fontSize: 13,
     paddingVertical: 15,
   },
@@ -267,7 +270,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     margin: 5,
     height: 1,
-    backgroundColor: '#878787',
   },
   typeContainer: {
     width: '100%',
@@ -280,12 +282,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '50%',
     padding: 15,
-    backgroundColor: '#5063BF',
     borderWidth: 2,
-    borderColor: 'black',
   },
   typeText: {
-    color: 'white',
     fontSize: 18,
   },
   inputContainer: {
