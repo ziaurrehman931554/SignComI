@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ImageBackground, StyleSheet, Platform, Dimensions } from "react-native";
 import { Camera } from "expo-camera";
 import { StatusBar } from 'expo-status-bar';
+import { WebView} from 'react-native-webview';
+
 
 import { useStyle, useUser } from "AppContext";
 
@@ -94,12 +96,27 @@ export default function CallingScreen({ navigation, userToken }: CallingScreenPr
       </View>
       <View style={[styles.otherCamContainer, appStyles.colorBackground, {height: height - appStyles.top.paddingTop - 192}]}>
         {isCallOngoing && (
-        // <></>
-          <Camera
-            style={{ flex: 1, borderRadius: 11, zIndex: -1  }}
-            type={Camera.Constants.Type.front}
-            ref={(ref) => setCameraRef(ref)}
-          />
+        <WebView
+          source={{ uri: 'https://tomasgonzalez.github.io/hand-gesture-recognition-using-mediapipe-in-react/' }}
+          style={{ marginTop: 0 }}
+          javaScriptEnabled={true}
+          domStorageEnabled={true}
+          startInLoadingState={true}
+          containerStyle={{ height: '100%', width: '100%' }}
+          originWhitelist={['*']}
+          injectedJavaScript={`
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '110%';
+            document.body.style.width = '60%';
+            document.body.style.position = 'absolute';
+          `}
+        />
+
+          // <Camera
+          //   style={{ flex: 1, borderRadius: 11, zIndex: -1  }}
+          //   type={Camera.Constants.Type.front}
+          //   ref={(ref) => setCameraRef(ref)}
+          // />
         )}
       </View>
       <StatusBar style="dark" />
