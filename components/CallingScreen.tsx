@@ -93,12 +93,13 @@ export default function CallingScreen({ navigation, userToken }: CallingScreenPr
         </View>
       </View>
       <View style={[styles.otherCamContainer, appStyles.colorBackground, {height: height - appStyles.top.paddingTop - 192}]}>
-        {isCallOngoing && (<></>
-          // <Camera
-          //   style={{ flex: 1, borderRadius: 11, zIndex: -1  }}
-          //   type={Camera.Constants.Type.back}
-          //   ref={(ref) => setCameraRef(ref)}
-          // />
+        {isCallOngoing && (
+        // <></>
+          <Camera
+            style={{ flex: 1, borderRadius: 11, zIndex: -1  }}
+            type={Camera.Constants.Type.front}
+            ref={(ref) => setCameraRef(ref)}
+          />
         )}
       </View>
       <StatusBar style="dark" />
